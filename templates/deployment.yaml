@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Values.namesonar }}
+  name: {{ .Values.namesonar }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.namesonar }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.namesonar }}
+    spec:
+      containers:
+        - name: {{ .Values.namesonar }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          resources:
+            requests:
+              cpu: {{ .Values.requests.cpu }}
+              memory: {{ .Values.requests.memory }}
+            limits:
+              cpu: {{ .Values.limits.cpu }}
+              memory: {{ .Values.limits.memory }}
+              
+          volumeMounts: {{- range .Values.volumeMounts }}
+            - mountPath: {{ .mountPath }}
+              name: {{ .name }}
+              readOnly: false
+          {{- end }}
+
+          env: {{- range .Values.env }}
+            - name: {{ .name }}
+              value: {{ .value }}
+          {{- end }}
+      volumes: {{- range .Values.volumes }}
+         - name: {{ .name }}
+           persistentVolumeClaim:
+             claimName: {{ .claimName }}
+      {{- end }}
+
