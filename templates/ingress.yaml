@@ -2,13 +2,13 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: {{ .Values.nexus.name }}
+  name: {{ .Values.name }}
   namespace: nexus
 spec:
   rules:
-  - host: {{ .Values.nexus.hosts.host }}
+  - host: {{ .Values.hosts.host }}
     http:
-      paths: {{- range .Values.nexus.hosts.paths }}
+      paths: {{- range .Values.hosts.paths }}
         - path: /
           pathType: Prefix
           backend:
