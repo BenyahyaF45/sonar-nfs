@@ -9,7 +9,17 @@ image:
   repository: sonarqube
   tag: 8.8-community
   # Overrides the image tag whose default   tag: ""
-
+ingress:
+  enabled: true
+  name: sonar-ingress
+  hosts:
+      host: "sonar.10.242.1.80.nip.io"
+      paths:
+      - path: /
+        pathType: Prefix
+        service:
+          name: sonar
+          port: 9000
 image2:
   repository: postgres
   tag: 13
